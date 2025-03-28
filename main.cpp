@@ -2,7 +2,7 @@
 #include <Eigen>
 
 using namespace std;
-
+using namespace Eigen;
 // PALU
 Vector2d solveWithPALU (const Matrix2d& A, const Vector2d& b) {
 	PartialPivLU<Matrix2d> lu(A);
@@ -57,12 +57,22 @@ int main()
 	calculateError(x1_PALU, expected);
 	x1_QR = solveWithQR(A1, b1);
 	calculateError(x1_QR, expected);
+	
+	
+	//Risoluzione del secondo sistema
+	cout << "Sistema 2: " << endl;
+	x2_PALU = solveWithPALU(A2, b2);
+	calculateError(x2_PALU, expected);
+	x2_QR = solveWithQR(A2, b2);
+	calculateError(x2_QR, expected);
 
 
-	
-	
-	
-	
-	
+
+	//Risoluzione del terzo sistema
+	cout << "Sistema 3: " << solveWithPALU(A3, b3);
+	calculateError(x3_PALU, expected);
+	x3_QR = solveWithQR(A3, b3);
+	calculateError(x3_QR, expected);
+		
     return 0;
 }
