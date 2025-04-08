@@ -80,3 +80,29 @@ int main()
 
   return 0;
 }
+void TestSolution(const MatrixXd& A,
+                  const VectorXd& b,
+                  const VectorXd& solution,
+                  double& errRelPALU,
+                  double& errRelQR)
+{
+    double detA = A.determinant();
+    //errRelPALU=-1;
+    //errRelQR =-1;
+    errRelPALU = numeric_limits<double>::max();  //serve come inizializzazione dell'errore al posto di usare -1, è un valore molto alto, improbabile
+    errRelQR = numeric_limits<double>::max();    //così se la matrice è singolare non può calcolare l'errore ma comunque non resta senza inizializzazione
+    if( abs(detA)< 1e-16)  //controllo se la matrice è singolare verificando se il determinante è minore di una certa soglia
+    {                      //in alternativa si poteva verificare se il minimo dei valori singolari era prossimo a 0
+      cout<<"The matrix is singular"<<endl;
+    }
+    else
+    {
+        Vector2d x=Vector2d::Zero();  //inizializzazione del vettore ottenuto come soluzione del sistema lineare
+        x=SolveSystemPALU(A,b);  //invoco la funzione che risolve il sistema lineare usando la fattorizzazione PA=LU
+        errRelPALU= (solution - x).norm() / solution.norm();  //calcolo in norma euclidea l'errore relativo tra la soluzione
+                                                             //ottenuta dalla fattorizzazione PA=LU e la soluzione esatta
+        x=SolveSystemQR(A,b);  //invoco la funzione che risolve il sistema lineare usando la fattorizzazione QR
+        errRelQR= (solution - x).norm() / solution.norm();  //calcolo in norma euclidea l'errore relativo tra la soluzione
+                                                           //ottenuta dalla fattorizzazione QR e la soluzione esatta
+    }
+}
