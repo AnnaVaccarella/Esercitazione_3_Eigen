@@ -106,3 +106,20 @@ void TestSolution(const MatrixXd& A,
                                                            //ottenuta dalla fattorizzazione QR e la soluzione esatta
     }
 }
+VectorXd SolveSystemPALU(const MatrixXd& A,
+                         const VectorXd& b)
+{
+    Vector2d x=Vector2d::Zero();
+    x = A.fullPivLu().solve(b); //fattorizzazione PA=LU applicata alla matrice A e con termine noto b
+
+    return x;
+}
+
+VectorXd SolveSystemQR(const MatrixXd& A,
+                       const VectorXd& b)
+{
+    Vector2d x=Vector2d::Zero();
+    x = A.householderQr().solve(b);  //fattorizzazione QR applicata alla matrice A e con termine noto b
+    return x;
+
+}
